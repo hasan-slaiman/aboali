@@ -242,7 +242,6 @@ function initAdminDashboard() {
     const description = descEl ? descEl.value.trim() : '';
     const file = document.getElementById('workImage').files[0];
 
-    if (!title) return;
     if (!editingWorkId && !file) return;
 
     note.classList.remove('success');
@@ -331,7 +330,7 @@ function loadGallery(showDelete) {
     })
     .then((items) => {
       const works = (items || [])
-        .filter((it) => (it.type === 'work' || !it.type) && it.imageUrl && it.title)
+        .filter((it) => (it.type === 'work' || !it.type) && it.imageUrl)
         .sort((a, b) => new Date(b.publishedAt || b.createdAt) - new Date(a.publishedAt || a.createdAt));
 
       if (!works.length) {
@@ -344,7 +343,7 @@ function loadGallery(showDelete) {
       grid.innerHTML = works.map((w) => `
         <div class="card work-card reveal in-view">
           <div class="thumb-wrap">
-            <img class="thumb" src="${w.imageUrl}" alt="${escapeHtml(w.title)}" loading="lazy">
+            <img class="thumb" src="${w.imageUrl}" alt="${escapeHtml(w.title || 'عمل من أعمال أبو علي للبلاط')}" loading="lazy">
             ${showDelete ? `<div class="card-actions">
               <button class="icon-action edit-btn" data-id="${w.id}" type="button" aria-label="تعديل">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>
@@ -355,7 +354,7 @@ function loadGallery(showDelete) {
             </div>` : ''}
           </div>
           <div class="cap">
-            <div class="title">${escapeHtml(w.title)}</div>
+            ${w.title ? `<div class="title">${escapeHtml(w.title)}</div>` : ''}
             <div class="date">${formatArabicDate(w.publishedAt || w.createdAt)}</div>
           </div>
         </div>
