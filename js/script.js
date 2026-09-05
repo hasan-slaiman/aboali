@@ -4,10 +4,14 @@ const MOCKAPI_URL = 'https://6a9bbeb80ad174e139e8c97c.mockapi.io/abo/bbb';
 const ADMIN_USERNAME = 'aboali';
 const ADMIN_PASSWORD = 'admin1432';
 const ADMIN_SESSION_KEY = 'aboaliAdmin';
+const GALLERY_PAGE_SIZE = 5;
 
 let editingWorkId = null;
 let editingWorkImageUrl = '';
 let editingTestimonialId = null;
+let galleryWorksCache = [];
+let galleryRevealCount = GALLERY_PAGE_SIZE;
+let galleryShowDelete = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
@@ -19,7 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
   initAdminDashboard();
   initPublicTestimonials();
   initTestimonialsAdmin();
+  initGalleryLoadMore();
 });
+
+// زر "تحميل المزيد" بمعرض الأعمال
+function initGalleryLoadMore() {
+  const btn = document.getElementById('loadMoreWorksBtn');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    galleryRevealCount += GALLERY_PAGE_SIZE;
+    renderGalleryBatch();
+  });
+}
 
 // شاشة الدخول: أيقونة تسجيل دخول المدير بأعلى الصفحة
 function initSplashAuth() {
@@ -301,12 +316,20 @@ function cancelEditWork() {
   if (cancelBtn) cancelBtn.style.display = 'none';
 }
 
-// ===== مشتركة: تحميل الأعمال من MockAPI وعرضها =====
+// ===== مشتركة: تحميل الأعمال من MockAPI وعرضها على دفعات =====
 
 function loadGallery(showDelete) {
   const grid = document.getElementById('galleryGrid');
   const emptyMsg = document.getElementById('galleryEmpty');
+  const loadingMsg = document.getElementById('galleryLoading');
+  const loadMoreBtn = document.getElementById('loadMoreWorksBtn');
   if (!grid) return;
+
+  galleryShowDelete = showDelete;
+  grid.innerHTML = '';
+  if (emptyMsg) emptyMsg.style.display = 'none';
+  if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+  if (loadingMsg) { loadingMsg.textContent = 'جاري تحميل الصور...'; loadingMsg.style.display = 'block'; }
 
   fetch(MOCKAPI_URL)
     .then((res) => {
@@ -314,59 +337,76 @@ function loadGallery(showDelete) {
       return res.json();
     })
     .then((items) => {
-      const works = (items || [])
+      galleryWorksCache = (items || [])
         .filter((it) => (it.type === 'work' || !it.type) && it.imageUrl)
         .sort((a, b) => new Date(b.publishedAt || b.createdAt) - new Date(a.publishedAt || a.createdAt));
+      galleryRevealCount = GALLERY_PAGE_SIZE;
 
-      if (!works.length) {
-        grid.innerHTML = '';
+      if (loadingMsg) loadingMsg.style.display = 'none';
+
+      if (!galleryWorksCache.length) {
         if (emptyMsg) { emptyMsg.textContent = 'لسا ما في أعمال مضافة، تابعونا قريبًا!'; emptyMsg.style.display = 'block'; }
         return;
       }
-      if (emptyMsg) emptyMsg.style.display = 'none';
 
-      grid.innerHTML = works.map((w) => `
-        <div class="card work-card reveal in-view">
-          <div class="thumb-wrap">
-            <img class="thumb" src="${w.imageUrl}" alt="${escapeHtml(w.title || 'عمل من أعمال أبو علي للبلاط')}" loading="lazy">
-            ${showDelete ? `<div class="card-actions">
-              <button class="icon-action edit-btn" data-id="${w.id}" type="button" aria-label="تعديل">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>
-              </button>
-              <button class="icon-action del-btn" data-id="${w.id}" type="button" aria-label="حذف">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
-              </button>
-            </div>` : ''}
-          </div>
-          <div class="cap">
-            ${w.title ? `<div class="title">${escapeHtml(w.title)}</div>` : ''}
-            <div class="date">${formatArabicDate(w.publishedAt || w.createdAt)}</div>
-          </div>
-        </div>
-      `).join('');
-
-      grid.querySelectorAll('.work-card').forEach((card, i) => {
-        card.addEventListener('click', () => showDetailsModal(works[i]));
-      });
-
-      if (showDelete) {
-        grid.querySelectorAll('.edit-btn').forEach((btn, i) => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            startEditWork(works[i]);
-          });
-        });
-        grid.querySelectorAll('.del-btn').forEach((btn) => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (confirm('متأكد بدك تحذف هالعمل؟')) deleteWork(btn.getAttribute('data-id'), showDelete);
-          });
-        });
-      }
+      renderGalleryBatch();
     })
     .catch(() => {
+      if (loadingMsg) loadingMsg.style.display = 'none';
       if (emptyMsg) { emptyMsg.textContent = 'صار خطأ بتحميل الأعمال، حاول تحدّث الصفحة'; emptyMsg.style.display = 'block'; }
     });
+}
+
+function renderGalleryBatch() {
+  const grid = document.getElementById('galleryGrid');
+  const loadMoreBtn = document.getElementById('loadMoreWorksBtn');
+  if (!grid) return;
+
+  const showDelete = galleryShowDelete;
+  const visible = galleryWorksCache.slice(0, galleryRevealCount);
+
+  grid.innerHTML = visible.map((w) => `
+    <div class="card work-card reveal in-view">
+      <div class="thumb-wrap">
+        <img class="thumb" src="${w.imageUrl}" alt="${escapeHtml(w.title || 'عمل من أعمال أبو علي للبلاط')}" loading="lazy">
+        ${showDelete ? `<div class="card-actions">
+          <button class="icon-action edit-btn" data-id="${w.id}" type="button" aria-label="تعديل">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>
+          </button>
+          <button class="icon-action del-btn" data-id="${w.id}" type="button" aria-label="حذف">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+          </button>
+        </div>` : ''}
+      </div>
+      <div class="cap">
+        ${w.title ? `<div class="title">${escapeHtml(w.title)}</div>` : ''}
+        <div class="date">${formatArabicDate(w.publishedAt || w.createdAt)}</div>
+      </div>
+    </div>
+  `).join('');
+
+  grid.querySelectorAll('.work-card').forEach((card, i) => {
+    card.addEventListener('click', () => showDetailsModal(visible[i]));
+  });
+
+  if (showDelete) {
+    grid.querySelectorAll('.edit-btn').forEach((btn, i) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        startEditWork(visible[i]);
+      });
+    });
+    grid.querySelectorAll('.del-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (confirm('متأكد بدك تحذف هالعمل؟')) deleteWork(btn.getAttribute('data-id'), showDelete);
+      });
+    });
+  }
+
+  if (loadMoreBtn) {
+    loadMoreBtn.style.display = galleryRevealCount < galleryWorksCache.length ? 'inline-flex' : 'none';
+  }
 }
 
 function deleteWork(id, showDelete) {
