@@ -19,7 +19,40 @@ document.addEventListener('DOMContentLoaded', () => {
   initAdminDashboard();
   initPublicTestimonials();
   initTestimonialsAdmin();
+  checkApiConnectivity();
 });
+
+// تنبيه VPN: بيتحقق إذا في وصول لقاعدة البيانات، ولو لأ بيظهر تنبيه للزائر
+function checkApiConnectivity() {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 6000);
+
+  fetch(MOCKAPI_URL, { signal: controller.signal })
+    .then((res) => {
+      if (!res.ok) throw new Error('bad response');
+    })
+    .catch(() => {
+      showVpnBanner();
+    })
+    .finally(() => clearTimeout(timeout));
+}
+
+function showVpnBanner() {
+  if (document.getElementById('vpnBanner')) return;
+
+  const div = document.createElement('div');
+  div.id = 'vpnBanner';
+  div.className = 'vpn-banner';
+  div.innerHTML = `
+    <span>يبدو إنو في مشكلة بالوصول لبعض خدمات الموقع (الصور وآراء العملاء) — جرّب تشغّل VPN وحدّث الصفحة.</span>
+    <button type="button" aria-label="إغلاق">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+  `;
+  document.body.prepend(div);
+
+  div.querySelector('button').addEventListener('click', () => div.remove());
+}
 
 // شاشة الدخول: أيقونة تسجيل دخول المدير بأعلى الصفحة
 function initSplashAuth() {

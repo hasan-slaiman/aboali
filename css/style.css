@@ -313,6 +313,17 @@ img, svg { display: block; max-width: 100%; }
 .breadcrumb { font-size: 0.85rem; color: var(--ink-mute); display: flex; align-items: center; gap: 8px; margin-top: 12px; }
 .breadcrumb a { color: var(--accent); font-weight: 700; }
 
+/* ===== تنبيه VPN ===== */
+
+.vpn-banner {
+  position: sticky; top: 0; z-index: 500;
+  background: #F5C242; color: #241B16;
+  padding: 12px 20px; font-size: 0.85rem; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; gap: 14px; text-align: center;
+}
+.vpn-banner button { flex-shrink: 0; display: flex; color: inherit; opacity: .75; }
+.vpn-banner button:hover { opacity: 1; }
+
 /* ===== لوحة تحكم المدير ===== */
 
 .admin-topbar {
