@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم المدير | أبو علي للبلاط</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="admin-topbar">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
+        <rect x="2" y="2" width="12" height="12" rx="2" style="fill:var(--accent)"></rect>
+        <rect x="16" y="2" width="12" height="12" rx="2" fill="#F5EFE8" opacity="0.85"></rect>
+        <rect x="2" y="16" width="12" height="12" rx="2" fill="#F5EFE8" opacity="0.85"></rect>
+        <rect x="16" y="16" width="12" height="12" rx="2" style="fill:var(--accent)" opacity="0.55"></rect>
+      </svg>
+      <span class="brand-name" style="color:var(--text-on-dark);">لوحة تحكم — أبو علي للبلاط</span>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a href="home.html" class="btn btn-outline" style="border-color:rgba(245,239,232,.25); color:var(--text-on-dark);">عرض الموقع</a>
+      <a href="gallery.html" class="btn btn-outline" style="border-color:rgba(245,239,232,.25); color:var(--text-on-dark);">معرض الأعمال</a>
+      <a href="admin-testimonials.html" class="btn btn-outline" style="border-color:rgba(245,239,232,.25); color:var(--text-on-dark);">إدارة آراء العملاء</a>
+      <button id="adminLogoutBtn" class="btn btn-primary" type="button">تسجيل خروج</button>
+    </div>
+  </header>
+
+  <main class="container" style="padding:clamp(32px,5vw,56px) clamp(20px,5vw,32px);">
+
+    <div class="form-card" style="max-width:480px; margin:0 auto 56px;">
+      <h2 id="workFormTitle" style="font-family:'El Messiri',sans-serif; font-size:1.3rem; margin-bottom:6px; color:var(--dark);">إضافة عمل جديد</h2>
+      <p style="font-size:0.84rem; color:var(--ink-mute); margin-bottom:22px;">تاريخ النشر بينحط تلقائيًا لحظة الإضافة</p>
+      <form id="addWorkForm">
+        <div class="form-field">
+          <label for="workTitle">عنوان العمل</label>
+          <input id="workTitle" type="text" placeholder="مثال: أرضية صالة - بورسلان" required>
+        </div>
+        <div class="form-field">
+          <label for="workDesc">وصف العمل</label>
+          <textarea id="workDesc" rows="3" placeholder="تفاصيل إضافية عن المشروع (اختياري)"></textarea>
+        </div>
+        <div class="form-field">
+          <label for="workImage">صورة العمل</label>
+          <input id="workImage" type="file" accept="image/*">
+          <span id="workImageNote" style="font-size:0.78rem; color:var(--ink-mute); display:none;">اترك الحقل فاضي إذا ما بدك تغيّر الصورة الحالية</span>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button type="submit" id="workSubmitBtn" class="btn btn-primary" style="flex:1;">نشر العمل</button>
+          <button type="button" id="workCancelEditBtn" class="btn btn-outline" style="display:none;">إلغاء التعديل</button>
+        </div>
+        <div id="addWorkNote" class="form-note"></div>
+      </form>
+    </div>
+
+    <h3 style="text-align:center; font-family:'El Messiri',sans-serif; font-size:1.15rem; color:var(--dark); margin-bottom:24px;">الأعمال المنشورة</h3>
+    <div class="grid-3" id="galleryGrid"></div>
+    <p id="galleryEmpty" class="section-desc" style="text-align:center; display:none;">لسا ما في أعمال مضافة</p>
+
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

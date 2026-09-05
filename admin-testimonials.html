@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدارة آراء العملاء | أبو علي للبلاط</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="admin-topbar">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
+        <rect x="2" y="2" width="12" height="12" rx="2" style="fill:var(--accent)"></rect>
+        <rect x="16" y="2" width="12" height="12" rx="2" fill="#F5EFE8" opacity="0.85"></rect>
+        <rect x="2" y="16" width="12" height="12" rx="2" fill="#F5EFE8" opacity="0.85"></rect>
+        <rect x="16" y="16" width="12" height="12" rx="2" style="fill:var(--accent)" opacity="0.55"></rect>
+      </svg>
+      <span class="brand-name" style="color:var(--text-on-dark);">لوحة تحكم — آراء العملاء</span>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a href="home.html" class="btn btn-outline" style="border-color:rgba(245,239,232,.25); color:var(--text-on-dark);">عرض الموقع</a>
+      <a href="admin.html" class="btn btn-outline" style="border-color:rgba(245,239,232,.25); color:var(--text-on-dark);">إدارة الأعمال</a>
+      <button id="adminLogoutBtn" class="btn btn-primary" type="button">تسجيل خروج</button>
+    </div>
+  </header>
+
+  <main class="container" style="padding:clamp(32px,5vw,56px) clamp(20px,5vw,32px);">
+
+    <div class="form-card" style="max-width:480px; margin:0 auto 56px;">
+      <h2 id="testiFormTitle" style="font-family:'El Messiri',sans-serif; font-size:1.3rem; margin-bottom:22px; color:var(--dark);">إضافة رأي عميل</h2>
+      <form id="addTestimonialForm">
+        <div class="form-field">
+          <label for="testiName">اسم العميل</label>
+          <input id="testiName" type="text" placeholder="مثال: أبو خالد" required>
+        </div>
+        <div class="form-field">
+          <label for="testiLocation">المنطقة</label>
+          <input id="testiLocation" type="text" placeholder="مثال: عمّان">
+        </div>
+        <div class="form-field">
+          <label for="testiRating">التقييم</label>
+          <select id="testiRating">
+            <option value="5">5 نجوم (ممتاز)</option>
+            <option value="4">4 نجوم</option>
+            <option value="3">3 نجوم</option>
+            <option value="2">نجمتان</option>
+            <option value="1">نجمة واحدة</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="testiQuote">نص الرأي</label>
+          <textarea id="testiQuote" rows="4" placeholder="اكتب رأي العميل هون..." required></textarea>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button type="submit" id="testiSubmitBtn" class="btn btn-primary" style="flex:1;">نشر الرأي</button>
+          <button type="button" id="testiCancelEditBtn" class="btn btn-outline" style="display:none;">إلغاء التعديل</button>
+        </div>
+        <div id="addTestimonialNote" class="form-note"></div>
+      </form>
+    </div>
+
+    <h3 style="text-align:center; font-family:'El Messiri',sans-serif; font-size:1.15rem; color:var(--dark); margin-bottom:24px;">الآراء المنشورة</h3>
+    <div class="grid-3" id="testimonialsGrid"></div>
+    <p id="testimonialsEmpty" class="section-desc" style="text-align:center; display:none;">لسا ما في آراء مضافة</p>
+
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

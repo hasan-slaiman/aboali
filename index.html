@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أبو علي للبلاط | معلم بلاط محترف</title>
+  <meta name="description" content="أبو علي للبلاط — تركيب وتبليط الأرضيات والحمامات والواجهات باحتراف، خبرة تفوق 15 سنة.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="splash-page">
+    <svg class="splash-bg" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice">
+      <rect x="40" y="40" width="160" height="160" rx="10" style="fill:var(--accent)" transform="rotate(-6 120 120)"></rect>
+      <rect x="240" y="10" width="160" height="160" rx="10" fill="#FBF7F2" transform="rotate(4 320 90)"></rect>
+      <rect x="460" y="50" width="190" height="190" rx="10" style="fill:var(--accent)" opacity="0.55" transform="rotate(-3 555 145)"></rect>
+      <rect x="620" y="20" width="150" height="150" rx="10" fill="#FBF7F2" transform="rotate(5 695 95)"></rect>
+      <rect x="20" y="260" width="190" height="190" rx="10" fill="#FBF7F2" transform="rotate(3 115 355)"></rect>
+      <rect x="270" y="240" width="170" height="170" rx="10" style="fill:var(--accent)" opacity="0.4" transform="rotate(-5 355 325)"></rect>
+      <rect x="500" y="280" width="160" height="160" rx="10" fill="#FBF7F2" transform="rotate(4 580 360)"></rect>
+      <rect x="60" y="480" width="170" height="170" rx="10" style="fill:var(--accent)" opacity="0.7" transform="rotate(4 145 565)"></rect>
+      <rect x="290" y="470" width="150" height="150" rx="10" fill="#FBF7F2" transform="rotate(-4 365 545)"></rect>
+      <rect x="470" y="500" width="180" height="180" rx="10" fill="#FBF7F2" transform="rotate(3 560 590)"></rect>
+      <rect x="640" y="470" width="150" height="150" rx="10" style="fill:var(--accent)" opacity="0.5" transform="rotate(-6 715 545)"></rect>
+    </svg>
+
+    <button id="adminIconBtn" class="splash-admin-icon" type="button" aria-label="دخول كمدير" title="دخول كمدير">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c1.5-3.5 5-5 8-5s6.5 1.5 8 5"></path></svg>
+    </button>
+
+    <div class="splash-content reveal in-view">
+      <svg class="splash-logo" width="72" height="72" viewBox="0 0 30 30" fill="none">
+        <rect x="2" y="2" width="12" height="12" rx="2" style="fill:var(--accent)"></rect>
+        <rect x="16" y="2" width="12" height="12" rx="2" fill="#F5EFE8" opacity="0.85"></rect>
+        <rect x="2" y="16" width="12" height="12" rx="2" fill="#F5EFE8" opacity="0.85"></rect>
+        <rect x="16" y="16" width="12" height="12" rx="2" style="fill:var(--accent)" opacity="0.55"></rect>
+      </svg>
+
+      <span class="badge-pill" style="background:rgba(245,239,232,0.1); color:var(--text-on-dark-mute);"><span class="dot"></span> معلم بلاط محترف · خبرة تفوق 15 سنة</span>
+
+      <h1 class="splash-title">أبو علي للبلاط</h1>
+      <p class="splash-tagline">شغل متقن، وأساس متين لبيتك — تركيب وتبليط الأرضيات، الحمامات والواجهات بدقة والتزام كامل بالمواعيد.</p>
+
+      <a href="home.html" class="btn btn-primary splash-enter-btn">
+        دخول كزائر
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"></path></svg>
+      </a>
+    </div>
+  </div>
+
+  <div id="loginModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+      <h3>دخول المدير</h3>
+      <form id="loginForm">
+        <div class="form-field">
+          <label for="loginUser">اسم المستخدم</label>
+          <input id="loginUser" type="text" autocomplete="username" required>
+        </div>
+        <div class="form-field">
+          <label for="loginPass">كلمة المرور</label>
+          <input id="loginPass" type="password" autocomplete="current-password" required>
+        </div>
+        <div id="loginError" style="color:#B4231E; font-size:0.85rem; margin-bottom:10px; min-height:1.2em;"></div>
+        <div style="display:flex; gap:10px;">
+          <button type="submit" class="btn btn-primary" style="flex:1;">دخول</button>
+          <button type="button" id="loginCancelBtn" class="btn btn-outline" style="flex:1;">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
