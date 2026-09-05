@@ -22,8 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
   showVpnBanner();
 });
 
-// تنبيه VPN ثابت بأعلى كل صفحات الموقع
+// تنبيه VPN ثابت بأعلى شاشة الدخول (index.html) بس
 function showVpnBanner() {
+  if (!document.querySelector('.splash-page')) return;
   if (document.getElementById('vpnBanner')) return;
 
   const div = document.createElement('div');
