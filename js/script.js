@@ -19,24 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initAdminDashboard();
   initPublicTestimonials();
   initTestimonialsAdmin();
-  checkApiConnectivity();
+  showVpnBanner();
 });
 
-// تنبيه VPN: بيتحقق إذا في وصول لقاعدة البيانات، ولو لأ بيظهر تنبيه للزائر
-function checkApiConnectivity() {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 6000);
-
-  fetch(MOCKAPI_URL, { signal: controller.signal })
-    .then((res) => {
-      if (!res.ok) throw new Error('bad response');
-    })
-    .catch(() => {
-      showVpnBanner();
-    })
-    .finally(() => clearTimeout(timeout));
-}
-
+// تنبيه VPN ثابت بأعلى كل صفحات الموقع
 function showVpnBanner() {
   if (document.getElementById('vpnBanner')) return;
 
@@ -44,7 +30,7 @@ function showVpnBanner() {
   div.id = 'vpnBanner';
   div.className = 'vpn-banner';
   div.innerHTML = `
-    <span>يبدو إنو في مشكلة بالوصول لبعض خدمات الموقع (الصور وآراء العملاء) — جرّب تشغّل VPN وحدّث الصفحة.</span>
+    <span>يجب تشغيل VPN حتى يعمل الموقع بشكل كامل (الصور وآراء العملاء).</span>
     <button type="button" aria-label="إغلاق">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
     </button>
