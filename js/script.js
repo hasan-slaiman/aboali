@@ -24,7 +24,42 @@ document.addEventListener('DOMContentLoaded', () => {
   initPublicTestimonials();
   initTestimonialsAdmin();
   initGalleryLoadMore();
+  recordVisit();
+  loadVisitorCount();
 });
+
+// تسجيل زيارة جديدة (مرة وحدة بكل جلسة متصفح) لحساب عدد الزوار
+function recordVisit() {
+  if (!document.querySelector('.splash-page')) return;
+  if (sessionStorage.getItem('aboaliVisitCounted')) return;
+
+  fetch(MOCKAPI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'visit', visitedAt: new Date().toISOString() })
+  })
+    .then(() => sessionStorage.setItem('aboaliVisitCounted', '1'))
+    .catch(() => {});
+}
+
+// عرض عدد الزوار بلوحة تحكم المدير
+function loadVisitorCount() {
+  const el = document.getElementById('visitorCount');
+  if (!el) return;
+
+  fetch(MOCKAPI_URL)
+    .then((res) => {
+      if (!res.ok) throw new Error('fetch failed');
+      return res.json();
+    })
+    .then((items) => {
+      const count = (items || []).filter((it) => it.type === 'visit').length;
+      el.textContent = count;
+    })
+    .catch(() => {
+      el.textContent = '—';
+    });
+}
 
 // تحميل تلقائي لباقي الصور عند التمرير لآخر المعرض
 function initGalleryLoadMore() {
