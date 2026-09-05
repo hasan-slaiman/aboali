@@ -19,27 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAdminDashboard();
   initPublicTestimonials();
   initTestimonialsAdmin();
-  showVpnBanner();
 });
-
-// تنبيه VPN ثابت بأعلى شاشة الدخول (index.html) بس
-function showVpnBanner() {
-  if (!document.querySelector('.splash-page')) return;
-  if (document.getElementById('vpnBanner')) return;
-
-  const div = document.createElement('div');
-  div.id = 'vpnBanner';
-  div.className = 'vpn-banner';
-  div.innerHTML = `
-    <span>يجب تشغيل VPN حتى يعمل الموقع بشكل كامل (الصور وآراء العملاء).</span>
-    <button type="button" aria-label="إغلاق">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
-    </button>
-  `;
-  document.body.prepend(div);
-
-  div.querySelector('button').addEventListener('click', () => div.remove());
-}
 
 // شاشة الدخول: أيقونة تسجيل دخول المدير بأعلى الصفحة
 function initSplashAuth() {
