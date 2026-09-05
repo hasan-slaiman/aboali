@@ -26,14 +26,24 @@ document.addEventListener('DOMContentLoaded', () => {
   initGalleryLoadMore();
 });
 
-// زر "تحميل المزيد" بمعرض الأعمال
+// تحميل تلقائي لباقي الصور عند التمرير لآخر المعرض
 function initGalleryLoadMore() {
-  const btn = document.getElementById('loadMoreWorksBtn');
-  if (!btn) return;
-  btn.addEventListener('click', () => {
-    galleryRevealCount += GALLERY_PAGE_SIZE;
-    renderGalleryBatch();
-  });
+  const sentinel = document.getElementById('galleryScrollSentinel');
+  if (!sentinel || !('IntersectionObserver' in window)) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && galleryRevealCount < galleryWorksCache.length) {
+          galleryRevealCount += GALLERY_PAGE_SIZE;
+          renderGalleryBatch();
+        }
+      });
+    },
+    { rootMargin: '300px' }
+  );
+
+  observer.observe(sentinel);
 }
 
 // شاشة الدخول: أيقونة تسجيل دخول المدير بأعلى الصفحة
@@ -322,13 +332,11 @@ function loadGallery(showDelete) {
   const grid = document.getElementById('galleryGrid');
   const emptyMsg = document.getElementById('galleryEmpty');
   const loadingMsg = document.getElementById('galleryLoading');
-  const loadMoreBtn = document.getElementById('loadMoreWorksBtn');
   if (!grid) return;
 
   galleryShowDelete = showDelete;
   grid.innerHTML = '';
   if (emptyMsg) emptyMsg.style.display = 'none';
-  if (loadMoreBtn) loadMoreBtn.style.display = 'none';
   if (loadingMsg) { loadingMsg.textContent = 'جاري تحميل الصور...'; loadingMsg.style.display = 'block'; }
 
   fetch(MOCKAPI_URL)
@@ -359,7 +367,6 @@ function loadGallery(showDelete) {
 
 function renderGalleryBatch() {
   const grid = document.getElementById('galleryGrid');
-  const loadMoreBtn = document.getElementById('loadMoreWorksBtn');
   if (!grid) return;
 
   const showDelete = galleryShowDelete;
@@ -402,10 +409,6 @@ function renderGalleryBatch() {
         if (confirm('متأكد بدك تحذف هالعمل؟')) deleteWork(btn.getAttribute('data-id'), showDelete);
       });
     });
-  }
-
-  if (loadMoreBtn) {
-    loadMoreBtn.style.display = galleryRevealCount < galleryWorksCache.length ? 'inline-flex' : 'none';
   }
 }
 
