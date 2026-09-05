@@ -243,7 +243,11 @@ function initAdminDashboard() {
     const description = descEl ? descEl.value.trim() : '';
     const file = document.getElementById('workImage').files[0];
 
-    if (!editingWorkId && !file) return;
+    if (!editingWorkId && !file) {
+      note.classList.remove('success');
+      note.textContent = 'لازم تختار صورة عشان تنشر العمل';
+      return;
+    }
 
     note.classList.remove('success');
     note.textContent = editingWorkId ? 'جاري حفظ التعديل...' : 'جاري رفع الصورة...';
